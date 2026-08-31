@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NiaCode — Cyber Login</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css">
+
+    <style>
+        /* =========================================================
+   RESET
+========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Vazir, sans-serif;
+            background: #03040a;
+            color: #fff;
+        }
+
+        button,
+        input {
+            font-family: inherit;
+        }
+
+        /* =========================================================
+   ROOT
+========================================================= */
+
+        :root {
+            --purple: #8b5cf6;
+            --violet: #a855f7;
+            --pink: #ec4899;
+            --cyan: #22d3ee;
+            --blue: #3b82f6;
+        }
+
+        /* =========================================================
+   SCENE
+========================================================= */
+
+        .scene {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+
+            background:
+                radial-gradient(circle at 50% 50%,
+                    rgba(99, 102, 241, .10),
+                    transparent 28%),
+                radial-gradient(circle at 15% 20%,
+                    rgba(139, 92, 246, .08),
+                    transparent 25%),
+                radial-gradient(circle at 85% 80%,
+                    rgba(34, 211, 238, .06),
+                    transparent 25%),
+                #03040a;
+        }
+
+        /* =========================================================
+   BACKGROUND GRID
+========================================================= */
+
+        .grid {
+            position: absolute;
+            inset: -50%;
+
+            background-image:
+                linear-gradient(rgba(139, 92, 246, .055) 1px,
+                    transparent 1px),
+                linear-gradient(90deg,
+                    rgba(139, 92, 246, .055) 1px,
+                    transparent 1px);
+
+            background-size: 70px 70px;
+
+            transform:
+                perspective(700px) rotateX(68deg) translateY(25%);
+
+            animation:
+                gridMove 12s linear infinite;
+
+            opacity: .55;
+        }
+
+        @keyframes gridMove {
+
+            from {
+                background-position:
+                    0 0,
+                    0 0;
+            }
+
+            to {
+                background-position:
+                    0 70px,
+                    70px 0;
+            }
+
+        }
+
+        /* =========================================================
+   VIGNETTE
+========================================================= */
+
+        .vignette {
+            position: absolute;
+            inset: 0;
+
+            background:
+                radial-gradient(circle,
+                    transparent 35%,
+                    rgba(0, 0, 0, .72) 100%);
+
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        /* =========================================================
+   MOVING LIGHTS
+========================================================= */
+
+        .light {
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: .12;
+        }
+
+        .light.one {
+            top: -250px;
+            right: -100px;
+            background: #7c3aed;
+
+            animation:
+                lightOne 9s ease-in-out infinite alternate;
+        }
+
+        .light.two {
+            bottom: -250px;
+            left: -100px;
+            background: #06b6d4;
+
+            animation:
+                lightTwo 11s ease-in-out infinite alternate;
+        }
+
+        @keyframes lightOne {
+
+            to {
+                transform:
+                    translate(-150px, 220px) scale(1.4);
+            }
+
+        }
+
+        @keyframes lightTwo {
+
+            to {
+                transform:
+                    translate(180px, -180px) scale(1.35);
+            }
+
+        }
+
+        /* =========================================================
+   STARS
+========================================================= */
+
+        .stars {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+
+            width: 2px;
+            height: 2px;
+
+            border-radius: 50%;
+
+            background: #fff;
+
+            box-shadow:
+                0 0 8px #a78bfa;
+
+            animation:
+                starMove linear infinite;
+        }
+
+        @keyframes starMove {
+
+            0% {
+                transform:
+                    translate3d(0, 110vh, 0) scale(.3);
+
+                opacity: 0;
+            }
+
+            15% {
+                opacity: .8;
+            }
+
+            80% {
+                opacity: .35;
+            }
+
+            100% {
+                transform:
+                    translate3d(var(--drift),
+                        -20vh,
+                        0) scale(1.2);
+
+                opacity: 0;
+            }
+
+        }
+
+        /* =========================================================
+   TOP SYSTEM
+========================================================= */
+
+        .system-top {
+            position: absolute;
+
+            top: 28px;
+            left: 50%;
+
+            transform:
+                translateX(-50%);
+
+            z-index: 50;
+
+            font-family: monospace;
+
+            font-size: 10px;
+
+            letter-spacing: 3px;
+
+            color: #57576a;
+
+            opacity: 0;
+
+            animation:
+                topAppear 1s 1.2s forwards;
+        }
+
+        .system-top span {
+            color: #a78bfa;
+
+            text-shadow:
+                0 0 15px #8b5cf6;
+        }
+
+        @keyframes topAppear {
+
+            to {
+                opacity: 1;
+            }
+
+        }
+
+        /* =========================================================
+   CENTER CORE
+========================================================= */
+
+        .core-system {
+
+            position: absolute;
+
+            left: 50%;
+            top: 50%;
+
+            width: 500px;
+            height: 500px;
+
+            transform:
+                translate(-50%, -50%);
+
+            z-index: 5;
+
+            pointer-events: none;
+
+        }
+
+        /* =========================================================
+   CORE RINGS
+========================================================= */
+
+        .ring {
+
+            position: absolute;
+
+            left: 50%;
+            top: 50%;
+
+            border-radius: 50%;
+
+            transform:
+                translate(-50%, -50%);
+
+            border:
+                1px solid rgba(139, 92, 246, .22);
+
+            box-shadow:
+                0 0 30px rgba(139, 92, 246, .05);
+
+        }
+
+        .ring.r1 {
+            width: 160px;
+            height: 160px;
+
+            animation:
+                ringSpin 10s linear infinite;
+        }
+
+        .ring.r2 {
+            width: 240px;
+            height: 240px;
+
+            border-style: dashed;
+
+            animation:
+                ringSpinReverse 16s linear infinite;
+        }
+
+        .ring.r3 {
+            width: 340px;
+            height: 340px;
+
+            border-color:
+                rgba(34, 211, 238, .12);
+
+            animation:
+                ringSpin 22s linear infinite;
+        }
+
+        .ring.r4 {
+            width: 450px;
+            height: 450px;
+
+            border:
+                1px solid rgba(236, 72, 153, .08);
+
+            animation:
+                ringSpinReverse 28s linear infinite;
+        }
+
+        @keyframes ringSpin {
+
+            to {
+                transform:
+                    translate(-50%, -50%) rotate(360deg);
+            }
+
+        }
+
+        @keyframes ringSpinReverse {
+
+            to {
+                transform:
+                    translate(-50%, -50%) rotate(-360deg);
+            }
+
+        }
+
+        /* =========================================================
+   CORE ENERGY
+========================================================= */
+
+        .energy-core {
+
+            position: absolute;
+
+            left: 50%;
+            top: 50%;
+
+            width: 80px;
+            height: 80px;
+
+            transform:
+                translate(-50%, -50%) scale(.2);
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(circle,
+                    #fff 0%,
+                    #c4b5fd 8%,
+                    #8b5cf6 28%,
+                    rgba(139, 92, 246, .2) 55%,
+                    transparent 70%);
+
+            filter:
+                drop-shadow(0 0 20px #8b5cf6);
+
+            opacity: 0;
+
+            animation:
+                coreAppear 1.5s .5s cubic-bezier(.16, 1, .3, 1) forwards,
+
+                corePulse 2.5s 2s ease-in-out infinite;
+        }
+
+        @keyframes coreAppear {
+
+            0% {
+                opacity: 0;
+                transform:
+                    translate(-50%, -50%) scale(.1);
+            }
+
+            60% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: .65;
+
+                transform:
+                    translate(-50%, -50%) scale(1);
+            }
+
+        }
+
+        @keyframes corePulse {
+
+            50% {
+                filter:
+                    drop-shadow(0 0 40px #8b5cf6);
+
+                opacity: .9;
+            }
+
+        }
+
+        /* =========================================================
+   HORIZONTAL SCAN
+========================================================= */
+
+        .scan-line {
+
+            position: absolute;
+
+            left: 0;
+            right: 0;
+
+            height: 1px;
+
+            top: 50%;
+
+            background:
+                linear-gradient(90deg,
+                    transparent,
+                    rgba(139, 92, 246, .8),
+                    transparent);
+
+            box-shadow:
+                0 0 20px #8b5cf6;
+
+            opacity: .3;
+
+            animation:
+                scan 4s ease-in-out infinite;
+        }
+
+        @keyframes scan {
+
+            0% {
+                transform:
+                    translateY(-45vh);
+
+                opacity: 0;
+            }
+
+            15% {
+                opacity: .5;
+            }
+
+            50% {
+                opacity: .15;
+            }
+
+            100% {
+                transform:
+                    translateY(45vh);
+
+                opacity: 0;
+            }
+
+        }
+
+        /* =========================================================
+   LOGIN PANEL
+========================================================= */
+
+        .login-panel {
+
+            position: absolute;
+
+            left: 50%;
+            top: 50%;
+
+            width: 410px;
+
+            transform:
+                translate(-50%, -50%) translateY(80px) scale(.82);
+
+            opacity: 0;
+
+            z-index: 20;
+
+            padding: 34px;
+
+            border-radius: 28px;
+
+            background:
+                linear-gradient(145deg,
+                    rgba(17, 14, 28, .88),
+                    rgba(6, 8, 16, .94));
+
+            border:
+                1px solid rgba(167, 139, 250, .25);
+
+            backdrop-filter:
+                blur(28px);
+
+            box-shadow:
+
+                0 40px 100px rgba(0, 0, 0, .75),
+
+                inset 0 1px 0 rgba(255, 255, 255, .07),
+
+                0 0 80px rgba(139, 92, 246, .08);
+
+            animation:
+                panelEnter 1.4s 2.2s cubic-bezier(.16, 1, .3, 1) forwards;
+
+        }
+
+        @keyframes panelEnter {
+
+            0% {
+                opacity: 0;
+
+                transform:
+                    translate(-50%, -50%) translateY(100px) scale(.75);
+            }
+
+            60% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 1;
+
+                transform:
+                    translate(-50%, -50%) translateY(0) scale(1);
+            }
+
+        }
+
+        /* =========================================================
+   PANEL CORNERS
+========================================================= */
+
+        .corner {
+
+            position: absolute;
+
+            width: 22px;
+            height: 22px;
+
+            border-color: #8b5cf6;
+
+            opacity: .8;
+        }
+
+        .corner.tl {
+            top: -1px;
+            left: -1px;
+
+            border-top: 2px solid;
+            border-left: 2px solid;
+
+            border-radius: 8px 0 0 0;
+        }
+
+        .corner.tr {
+            top: -1px;
+            right: -1px;
+
+            border-top: 2px solid;
+            border-right: 2px solid;
+
+            border-radius: 0 8px 0 0;
+        }
+
+        .corner.bl {
+            bottom: -1px;
+            left: -1px;
+
+            border-bottom: 2px solid;
+            border-left: 2px solid;
+
+            border-radius: 0 0 0 8px;
+        }
+
+        .corner.br {
+            bottom: -1px;
+            right: -1px;
+
+            border-bottom: 2px solid;
+            border-right: 2px solid;
+
+            border-radius: 0 0 8px 0;
+        }
+
+        /* =========================================================
+   HEADER
+========================================================= */
+
+        .panel-header {
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+        .logo {
+
+            position: relative;
+
+            width: 65px;
+            height: 65px;
+
+            margin:
+                0 auto 17px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(135deg,
+                    #6d28d9,
+                    #8b5cf6 45%,
+                    #c026d3);
+
+            font-family: monospace;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            box-shadow:
+                0 0 30px rgba(139, 92, 246, .35);
+
+            animation:
+                logoFloat 3s ease-in-out infinite;
+        }
+
+        .logo::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: -7px;
+
+            border-radius: 24px;
+
+            border:
+                1px solid rgba(167, 139, 250, .3);
+
+            animation:
+                logoRing 4s linear infinite;
+        }
+
+        @keyframes logoFloat {
+
+            50% {
+                transform:
+                    translateY(-4px);
+            }
+
+        }
+
+        @keyframes logoRing {
+
+            to {
+                transform:
+                    rotate(360deg);
+            }
+
+        }
+
+        .panel-title {
+
+            font-size: 25px;
+
+            font-weight: 900;
+
+            letter-spacing: -.5px;
+        }
+
+        .panel-title span {
+
+            color: #a78bfa;
+
+            text-shadow:
+                0 0 18px rgba(139, 92, 246, .65);
+        }
+
+        .panel-description {
+
+            margin-top: 7px;
+
+            color: #646477;
+
+            font-size: 10px;
+        }
+
+        /* =========================================================
+   STATUS
+========================================================= */
+
+        .status {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 7px;
+
+            margin-top: 15px;
+
+            font-family: monospace;
+
+            font-size: 8px;
+
+            color: #555568;
+
+            direction: ltr;
+        }
+
+        .status-dot {
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #22d3ee;
+
+            box-shadow:
+                0 0 10px #22d3ee;
+
+            animation:
+                statusPulse 1.5s infinite;
+        }
+
+        @keyframes statusPulse {
+
+            50% {
+                opacity: .3;
+                transform: scale(.7);
+            }
+
+        }
+
+        /* =========================================================
+   FIELDS
+========================================================= */
+
+        .field {
+
+            margin-bottom: 17px;
+        }
+
+        .field label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #89899a;
+
+            font-size: 10px;
+        }
+
+        .input-box {
+
+            position: relative;
+        }
+
+        .input {
+
+            width: 100%;
+
+            height: 54px;
+
+            padding:
+                0 16px;
+
+            border:
+                1px solid rgba(255, 255, 255, .075);
+
+            outline: none;
+
+            border-radius: 14px;
+
+            color: #fff;
+
+            background:
+                rgba(255, 255, 255, .035);
+
+            font-size: 11px;
+
+            transition:
+                .35s;
+        }
+
+        .input::placeholder {
+
+            color: #424250;
+        }
+
+        .input:focus {
+
+            border-color:
+                rgba(139, 92, 246, .75);
+
+            background:
+                rgba(139, 92, 246, .045);
+
+            box-shadow:
+                0 0 0 4px rgba(139, 92, 246, .06),
+
+                0 0 30px rgba(139, 92, 246, .12);
+        }
+
+        /* =========================================================
+   INPUT SCAN
+========================================================= */
+
+        .input-box::after {
+
+            content: "";
+
+            position: absolute;
+
+            bottom: 0;
+            right: 8px;
+
+            width: 0;
+            height: 1px;
+
+            background:
+                linear-gradient(90deg,
+                    #8b5cf6,
+                    #ec4899);
+
+            box-shadow:
+                0 0 10px #8b5cf6;
+
+            transition:
+                width .5s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .input-box:focus-within::after {
+
+            width:
+                calc(100% - 16px);
+        }
+
+        /* =========================================================
+   PASSWORD BUTTON
+========================================================= */
+
+        .password-toggle {
+
+            position: absolute;
+
+            left: 15px;
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            border: 0;
+
+            background: none;
+
+            color: #5d5d70;
+
+            cursor: pointer;
+
+            font-size: 13px;
+
+            transition: .3s;
+        }
+
+        .password-toggle:hover {
+
+            color: #a78bfa;
+
+            text-shadow:
+                0 0 12px #8b5cf6;
+        }
+
+        /* =========================================================
+   OPTIONS
+========================================================= */
+
+        .options {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin:
+                3px 0 22px;
+
+            font-size: 9px;
+
+            color: #6b6b7c;
+        }
+
+        .remember {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            cursor: pointer;
+        }
+
+        .remember input {
+
+            appearance: none;
+
+            width: 14px;
+            height: 14px;
+
+            border-radius: 4px;
+
+            border:
+                1px solid rgba(255, 255, 255, .12);
+
+            background:
+                rgba(255, 255, 255, .03);
+
+            cursor: pointer;
+
+            transition: .3s;
+        }
+
+        .remember input:checked {
+
+            background: #8b5cf6;
+
+            border-color: #8b5cf6;
+
+            box-shadow:
+                0 0 12px rgba(139, 92, 246, .5);
+        }
+
+        .forgot {
+
+            color: #a78bfa;
+
+            text-decoration: none;
+        }
+
+        /* =========================================================
+   LOGIN BUTTON
+========================================================= */
+
+        .login-btn {
+
+            position: relative;
+
+            width: 100%;
+            height: 55px;
+
+            border: 0;
+
+            border-radius: 15px;
+
+            color: white;
+
+            cursor: pointer;
+
+            overflow: hidden;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            background:
+                linear-gradient(100deg,
+                    #6d28d9,
+                    #8b5cf6,
+                    #c026d3,
+                    #8b5cf6);
+
+            background-size: 300% 100%;
+
+            animation:
+                buttonGradient 5s linear infinite;
+
+            box-shadow:
+                0 15px 40px rgba(124, 58, 237, .25);
+
+            transition:
+                transform .25s,
+                box-shadow .25s;
+        }
+
+        @keyframes buttonGradient {
+
+            to {
+                background-position:
+                    300% 0;
+            }
+
+        }
+
+        .login-btn:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 18px 50px rgba(139, 92, 246, .45);
+        }
+
+        .login-btn:active {
+
+            transform:
+                translateY(0) scale(.98);
+        }
+
+        /* BUTTON SCAN */
+
+        .login-btn::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -100%;
+
+            width: 60%;
+
+            height: 100%;
+
+            background:
+                linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, .25),
+                    transparent);
+
+            transform:
+                skewX(-20deg);
+
+            animation:
+                buttonScan 2.8s infinite;
+        }
+
+        @keyframes buttonScan {
+
+            0% {
+                left: -100%;
+            }
+
+            60%,
+            100% {
+                left: 150%;
+            }
+
+        }
+
+        /* =========================================================
+   FOOTER
+========================================================= */
+
+        .panel-footer {
+
+            margin-top: 20px;
+
+            text-align: center;
+
+            color: #414151;
+
+            font-family: monospace;
+
+            font-size: 7px;
+
+            letter-spacing: 1px;
+
+            direction: ltr;
+        }
+
+        /* =========================================================
+   PARTICLES
+========================================================= */
+
+        .particles {
+
+            position: absolute;
+
+            left: 50%;
+            top: 50%;
+
+            z-index: 60;
+
+            pointer-events: none;
+        }
+
+        .particle {
+
+            position: absolute;
+
+            width: 4px;
+            height: 4px;
+
+            border-radius: 50%;
+
+            background: #a78bfa;
+
+            box-shadow:
+                0 0 15px #8b5cf6;
+
+            opacity: 0;
+        }
+
+        /* =========================================================
+   ACCESS MODE
+========================================================= */
+
+        .access-mode .login-panel {
+
+            animation:
+                panelExit .7s forwards;
+        }
+
+        @keyframes panelExit {
+
+            to {
+
+                opacity: 0;
+
+                transform:
+                    translate(-50%, -50%) scale(.8) rotateX(12deg);
+            }
+
+        }
+
+        .access-mode .core-system {
+
+            animation:
+                coreExpand 1.5s forwards;
+        }
+
+        @keyframes coreExpand {
+
+            to {
+                transform:
+                    translate(-50%, -50%) scale(2.5);
+
+                filter:
+                    brightness(2);
+            }
+
+        }
+
+        /* =========================================================
+   SUCCESS
+========================================================= */
+
+        .success-screen {
+
+            position: absolute;
+
+            inset: 0;
+
+            z-index: 100;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            pointer-events: none;
+
+            opacity: 0;
+        }
+
+        .success-screen.show {
+
+            animation:
+                successIn 1s forwards;
+        }
+
+        @keyframes successIn {
+
+            from {
+                opacity: 0;
+                transform: scale(.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+        }
+
+        .success-circle {
+
+            width: 95px;
+            height: 95px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border:
+                1px solid #22d3ee;
+
+            color: #22d3ee;
+
+            font-size: 34px;
+
+            box-shadow:
+                0 0 30px #22d3ee,
+
+                0 0 100px rgba(34, 211, 238, .35);
+
+            animation:
+                successPulse 2s infinite;
+        }
+
+        @keyframes successPulse {
+
+            50% {
+                transform: scale(1.06);
+
+                box-shadow:
+                    0 0 50px #22d3ee,
+
+                    0 0 130px rgba(34, 211, 238, .5);
+            }
+
+        }
+
+        .success-title {
+
+            margin-top: 28px;
+
+            font-family: monospace;
+
+            font-size:
+                clamp(24px, 4vw, 42px);
+
+            letter-spacing: 5px;
+
+            color: #d9fbff;
+
+            text-shadow:
+                0 0 25px #22d3ee;
+
+            direction: ltr;
+        }
+
+        .success-sub {
+
+            margin-top: 10px;
+
+            color: #67e8f9;
+
+            font-family: monospace;
+
+            font-size: 9px;
+
+            direction: ltr;
+        }
+
+        /* =========================================================
+   RESPONSIVE
+========================================================= */
+
+        @media(max-width:700px) {
+
+            .core-system {
+                transform:
+                    translate(-50%, -50%) scale(.65);
+            }
+
+            .login-panel {
+
+                width:
+                    calc(100vw - 32px);
+
+                padding: 26px;
+
+            }
+
+            .panel-title {
+                font-size: 22px;
+            }
+
+            .system-top {
+                font-size: 8px;
+                letter-spacing: 2px;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="scene" id="scene">
+
+        <!-- BACKGROUND -->
+
+        <div class="grid"></div>
+
+        <div class="light one"></div>
+        <div class="light two"></div>
+
+        <div class="stars" id="stars"></div>
+
+        <div class="scan-line"></div>
+
+
+        <!-- SYSTEM HEADER -->
+
+        <div class="system-top">
+            <span>NIACODE</span>
+            &nbsp; // &nbsp;
+            SECURE AUTHENTICATION SYSTEM
+        </div>
+
+
+        <!-- ENERGY CORE -->
+
+        <div class="core-system">
+
+            <div class="ring r1"></div>
+            <div class="ring r2"></div>
+            <div class="ring r3"></div>
+            <div class="ring r4"></div>
+
+            <div class="energy-core"></div>
+
+        </div>
+
+
+        <!-- LOGIN PANEL -->
+
+        <div class="login-panel" id="loginPanel">
+
+            <div class="corner tl"></div>
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="corner br"></div>
+
+
+            <div class="panel-header">
+
+                <div class="logo">
+                    NC
+                </div>
+
+                <div class="panel-title">
+                    ورود به
+                    <span>NiaCode</span>
+                </div>
+
+                <div class="panel-description">
+                    برای دسترسی به سیستم احراز هویت کنید
+                </div>
+
+                <div class="status">
+
+                    <span class="status-dot"></span>
+
+                    SYSTEM ONLINE
+
+                </div>
+
+            </div>
+
+
+            <!-- USERNAME -->
+
+            <div class="field">
+
+                <label>
+                    ایمیل یا نام کاربری
+                </label>
+
+                <div class="input-box">
+
+                    <input id="username" class="input" type="text" autocomplete="username"
+                        placeholder="example@email.com">
+
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="field">
+
+                <label>
+                    رمز عبور
+                </label>
+
+                <div class="input-box">
+
+                    <input id="password" class="input" type="password" autocomplete="current-password"
+                        placeholder="رمز عبور خود را وارد کنید">
+
+                    <button class="password-toggle" id="passwordToggle" type="button">
+                        ◉
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- OPTIONS -->
+
+            <div class="options">
+
+                <label class="remember">
+
+                    <input type="checkbox">
+
+                    مرا به خاطر بسپار
+
+                </label>
+
+                <a href="#" class="forgot">
+                    فراموشی رمز؟
+                </a>
+
+            </div>
+
+
+            <!-- LOGIN -->
+
+            <button class="login-btn" id="loginButton">
+                ورود به سیستم
+            </button>
+
+
+            <div class="panel-footer">
+                ENCRYPTED CONNECTION // AES-256 // SECURE CHANNEL
+            </div>
+
+        </div>
+
+
+        <!-- PARTICLES -->
+
+        <div class="particles" id="particles"></div>
+
+
+        <!-- SUCCESS -->
+
+        <div class="success-screen" id="successScreen">
+
+            <div class="success-circle">
+                ✓
+            </div>
+
+            <div class="success-title">
+                ACCESS GRANTED
+            </div>
+
+            <div class="success-sub">
+                SECURE CONNECTION ESTABLISHED
+            </div>
+
+        </div>
+
+
+        <div class="vignette"></div>
+
+    </div>
+
+
+    <script>
+
+        /* =========================================================
+           ELEMENTS
+        ========================================================= */
+
+        const scene =
+            document.getElementById("scene");
+
+        const stars =
+            document.getElementById("stars");
+
+        const particles =
+            document.getElementById("particles");
+
+        const username =
+            document.getElementById("username");
+
+        const password =
+            document.getElementById("password");
+
+        const passwordToggle =
+            document.getElementById("passwordToggle");
+
+        const loginButton =
+            document.getElementById("loginButton");
+
+        const loginPanel =
+            document.getElementById("loginPanel");
+
+        const successScreen =
+            document.getElementById("successScreen");
+
+
+        /* =========================================================
+           STARS
+        ========================================================= */
+
+        for (let i = 0; i < 110; i++) {
+
+            const star =
+                document.createElement("span");
+
+            star.className = "star";
+
+            star.style.left =
+                Math.random() * 100 + "%";
+
+            star.style.animationDuration =
+                (Math.random() * 8 + 6) + "s";
+
+            star.style.animationDelay =
+                -(Math.random() * 14) + "s";
+
+            star.style.setProperty(
+                "--drift",
+                (Math.random() * 100 - 50) + "px"
+            );
+
+            const size =
+                Math.random() * 2 + .5;
+
+            star.style.width =
+                size + "px";
+
+            star.style.height =
+                size + "px";
+
+            stars.appendChild(star);
+        }
+
+
+        /* =========================================================
+           PARTICLES
+        ========================================================= */
+
+        for (let i = 0; i < 150; i++) {
+
+            const particle =
+                document.createElement("span");
+
+            particle.className =
+                "particle";
+
+            const angle =
+                Math.random() *
+                Math.PI *
+                2;
+
+            const distance =
+                120 +
+                Math.random() * 650;
+
+            const x =
+                Math.cos(angle) *
+                distance;
+
+            const y =
+                Math.sin(angle) *
+                distance;
+
+            particle.style.setProperty(
+                "--x",
+                x + "px"
+            );
+
+            particle.style.setProperty(
+                "--y",
+                y + "px"
+            );
+
+            particles.appendChild(particle);
+        }
+
+
+        /* =========================================================
+           PASSWORD SHOW / HIDE
+        ========================================================= */
+
+        passwordToggle.addEventListener(
+            "click",
+            () => {
+
+                if (password.type === "password") {
+
+                    password.type =
+                        "text";
+
+                    passwordToggle.textContent =
+                        "○";
+
+                } else {
+
+                    password.type =
+                        "password";
+
+                    passwordToggle.textContent =
+                        "◉";
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           INPUT REACTION
+        ========================================================= */
+
+        username.addEventListener(
+            "focus",
+            () => {
+
+                document
+                    .querySelector(".core-system")
+                    .style.filter =
+                    "brightness(1.25)";
+
+            }
+        );
+
+        password.addEventListener(
+            "focus",
+            () => {
+
+                document
+                    .querySelector(".core-system")
+                    .style.filter =
+                    "brightness(1.5)";
+
+            }
+        );
+
+        document.querySelectorAll(".input")
+            .forEach(input => {
+
+                input.addEventListener(
+                    "blur",
+                    () => {
+
+                        document
+                            .querySelector(".core-system")
+                            .style.filter =
+                            "";
+
+                    }
+                );
+
+            });
+
+
+        /* =========================================================
+           MOUSE PARALLAX
+        ========================================================= */
+
+        document.addEventListener(
+            "mousemove",
+            event => {
+
+                const x =
+                    (event.clientX /
+                        window.innerWidth - .5);
+
+                const y =
+                    (event.clientY /
+                        window.innerHeight - .5);
+
+                const core =
+                    document.querySelector(
+                        ".core-system"
+                    );
+
+                const panel =
+                    document.querySelector(
+                        ".login-panel"
+                    );
+
+                core.style.transform =
+                    `
+            translate(
+                calc(-50% + ${x * 15}px),
+                calc(-50% + ${y * 15}px)
+            )
+            `;
+
+                panel.style.marginLeft =
+                    `${x * 8}px`;
+
+                panel.style.marginTop =
+                    `${y * 8}px`;
+
+            }
+        );
+
+
+        /* =========================================================
+           LOGIN
+        ========================================================= */
+
+        loginButton.addEventListener(
+            "click",
+            () => {
+
+                if (
+                    username.value.trim() === "" ||
+                    password.value.trim() === ""
+                ) {
+
+                    loginPanel.animate(
+                        [
+                            {
+                                transform:
+                                    "translate(-50%,-50%) translateX(0)"
+                            },
+                            {
+                                transform:
+                                    "translate(-50%,-50%) translateX(-10px)"
+                            },
+                            {
+                                transform:
+                                    "translate(-50%,-50%) translateX(10px)"
+                            },
+                            {
+                                transform:
+                                    "translate(-50%,-50%) translateX(-6px)"
+                            },
+                            {
+                                transform:
+                                    "translate(-50%,-50%) translateX(0)"
+                            }
+                        ],
+                        {
+                            duration: 450
+                        }
+                    );
+
+                    return;
+                }
+
+
+                /* BUTTON STATE */
+
+                loginButton.disabled =
+                    true;
+
+                loginButton.textContent =
+                    "در حال برقراری اتصال...";
+
+
+                /* SYSTEM MODE */
+
+                scene.classList.add(
+                    "access-mode"
+                );
+
+
+                /* PARTICLE EXPLOSION */
+
+                document
+                    .querySelectorAll(".particle")
+                    .forEach((particle, index) => {
+
+                        particle.animate(
+                            [
+                                {
+                                    opacity: 1,
+                                    transform:
+                                        "translate(0,0) scale(1)"
+                                },
+                                {
+                                    opacity: 0,
+                                    transform:
+                                        `
+                                translate(
+                                    ${particle.style.getPropertyValue("--x")},
+                                    ${particle.style.getPropertyValue("--y")}
+                                )
+                                scale(.1)
+                                `
+                                }
+                            ],
+                            {
+                                duration:
+                                    1200 +
+                                    Math.random() * 500,
+
+                                delay:
+                                    Math.random() * 200,
+
+                                easing:
+                                    "cubic-bezier(.16,1,.3,1)",
+
+                                fill:
+                                    "forwards"
+                            }
+                        );
+
+                    });
+
+
+                /* SUCCESS */
+
+                setTimeout(
+                    () => {
+
+                        successScreen.classList.add(
+                            "show"
+                        );
+
+                    },
+                    850
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
